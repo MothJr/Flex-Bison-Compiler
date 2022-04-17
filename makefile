@@ -14,6 +14,14 @@ scanner.c: scanner.l
 	flex scanner.l
 	mv lex.yy.c scanner.c
 
+parser.o: parser.c listing.h 
+	g++ -c parser.c
+
+parser.c tokens.h: parser.y
+	bison -d -v parser.y
+	mv parser.tab.c parser.c
+	cp parser.tab.h tokens.h
+
 listing.o: listing.cc listing.h
 	g++ -c listing.cc
 
