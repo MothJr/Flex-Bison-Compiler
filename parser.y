@@ -18,18 +18,20 @@ void yyerror(const char* message);
 
 %token IDENTIFIER
 %token INT_LITERAL
+%token REAL_LTERAL
+%token BOOLEAN_LITERAL
 
-%token ADDOP MULOP RELOP ANDOP
+%token ADDOP MULOP RELOP ANDOP REMOP EXPOP OROP
 
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS
 
 %%
 
 function:	
-	function_header optional_variable body ;
+	function_header '{' variable '}' body ;
 	
 function_header:	
-	FUNCTION IDENTIFIER RETURNS type ';' ;
+	FUNCTION IDENTIFIER '[' parameters ']' RETURNS type ';' ;
 
 optional_variable:
 	variable |
@@ -40,6 +42,7 @@ variable:
 
 type:
 	INTEGER |
+	REAL |
 	BOOLEAN ;
 
 body:
@@ -50,24 +53,31 @@ statement_:
 	error ';' ;
 	
 statement:
-	expression |
-	REDUCE operator reductions ENDREDUCE ;
+	expression ';' |
+	REDUCE operator '{' reductions '}' ENDREDUCE ';' |
+	CASE expression IS '{' case '}' OTHERS ARROW satement ENDCASE ';' ;
 
 operator:
 	ADDOP |
 	MULOP ;
+
+case: 
+	WHEN INT_LITERAL ARROW statement
 
 reductions:
 	reductions statement_ |
 	;
 		    
 expression:
-	expression ANDOP relation |
-	relation ;
+	'(' expression ')' |
+	expression binary_operator expression |
+	NOTOP expression |
+	INT_LITERAL | REAL_LTERAL | BOOLEAN_LITERAL |
+	IDENTIFIER
 
 relation:
 	relation RELOP term |
-	term;
+	term ;
 
 term:
 	term ADDOP factor |
