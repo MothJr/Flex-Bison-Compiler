@@ -2080,7 +2080,7 @@ void yyfree (void * ptr )
 #line 75 "scanner.l"
 
 
-int main()
+int main(int argc, char **argv)
 {
 	firstLine();
 	
@@ -2091,6 +2091,7 @@ int main()
 		fprintf(file, "%d %s\n", token, yytext);
 		token = yylex();
 	}
+	yyparse();
 	lastLine();
 	fclose(file);
 	return 0;

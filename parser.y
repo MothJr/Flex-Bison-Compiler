@@ -34,15 +34,11 @@ function:
 function_header:	
 	FUNCTION IDENTIFIER '[' parameters ']' RETURNS type ';' ;
 
-optional_variable:
-	variable |
-	;
-
 variable:
-	IDENTIFIER ':' type IS statement_ ;
+	IDENTIFIER ':' type IS statement ;
 
 parameters: 
-	parameter '{' ',' parameter '}'
+	parameter '{'',' parameter '}'
 
 parameter:
 	IDENTIFIER ':' type
@@ -82,7 +78,12 @@ expression:
 	INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
 	IDENTIFIER
 
-binary_operator: ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP
+expression:
+	expression ANDOP relation |
+	relation ;
+
+binary_operator: 
+	ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP
 
 relation:
 	relation RELOP term |
@@ -108,10 +109,4 @@ void yyerror(const char* message)
 	appendError(SYNTAX, message);
 }
 
-int main(int argc, char *argv[])    
-{
-	firstLine();
-	yyparse();
-	lastLine();
-	return 0;
-} 
+

@@ -3,8 +3,8 @@
 default:
 	make test
 
-compile: scanner.o listing.o
-	g++ -o compile scanner.o listing.o
+compile: scanner.o parser.o listing.o
+	g++ -o compile scanner.o parser.o listing.o
 	rm *.o
 	
 scanner.o: scanner.c listing.h tokens.h
