@@ -1,6 +1,0 @@
--- Function with a lexical error
-
-function test2 returns integer;
-begin
-    & * 2 ^ (2  + 4);
-end;

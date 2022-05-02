@@ -11,16 +11,18 @@ using namespace std;
 
 #include "listing.h"
 #include "tokens.h"
+#include "parser.tab.h"
 
 %}
 
 %option noyywrap
 
+
 ws		[ \t\r]+
 comment		\-\-.*\n
 line_comment  \/\/.*\n
 line		[\n]
-id		[A-Za-z][A-Za-z\d]*(?:_[A-Za-z\d]+)*
+id		[A-Za-z]([_]?[A-Za-z0-9])*
 digit		[0-9]
 int		{digit}+
 punc		[\(\),:;]
@@ -46,8 +48,8 @@ real_literal	[0-9]+\.[0-9]*([e|E]([\+|\-][0-9]+))?
 "* *"	{ ECHO; return(REPOP); }
 begin		{ ECHO; return(BEGIN_); }
 boolean		{ ECHO; return(BOOLEAN); }
-true	{ ECHO; return(BOOLEAN_LITERAL); }
-false	{ ECHO; return(BOOLEAN_LITERAL); }
+true	{ ECHO; return(BOOL_LITERAL); }
+false	{ ECHO; return(BOOL_LITERAL); }
 end		{ ECHO; return(END); }
 endreduce	{ ECHO; return(ENDREDUCE); }
 function	{ ECHO; return(FUNCTION); }
@@ -74,19 +76,3 @@ rem { ECHO; return(REMOP); }
 .		{ ECHO; appendError(LEXICAL, yytext); }
 %%
 
-int main(int argc, char **argv)
-{
-	firstLine();
-	
-	FILE *file = fopen("lexemes.txt", "wa"); 
-	int token = yylex();
-	while (token)
-	{
-		fprintf(file, "%d %s\n", token, yytext);
-		token = yylex();
-	}
-	yyparse();
-	lastLine();
-	fclose(file);
-	return 0;
-}

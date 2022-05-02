@@ -27,15 +27,23 @@ listing.o: listing.cc listing.h
 
 test1:
 	make compile
-	./compile < test1.txt
+	./compile < Test_Files/test1.txt
 
 test2:
 	make compile
-	./compile < test2.txt
+	./compile < Test_Files/test2.txt
 
 test3:
 	make compile
-	./compile < test3.txt
+	./compile < Test_Files/test3.txt
+
+test4:
+	make compile
+	./compile < Test_Files/test4.txt
+
+test5:
+	make compile
+	./compile < Test_Files/test5.txt
 
 test: 
 	echo  "***** BUILDING EXECUTABLE *****"
@@ -44,14 +52,24 @@ test:
 	echo
 	echo "***** RUNNING TEST CASE 1 *****"
 	echo
-	./compile < test1.txt
+	./compile < Test_Files/test1.txt
+	echo
 	echo "***** RUNNING TEST CASE 2 *****"
 	echo
-	./compile < test2.txt
+	./compile < Test_Files/test2.txt
 	echo
 	echo "***** RUNNING TEST CASE 3 *****"
 	echo
-	./compile < test3.txt
+	./compile < Test_Files/test3.txt
+	echo
+	echo "***** RUNNING TEST CASE 4 *****"
+	echo
+	./compile < Test_Files/test4.txt
+	echo
+	echo "***** RUNNING TEST CASE 5 *****"
+	echo
+	./compile < Test_Files/test5.txt
+	
 
 test_log: 
 	make test > test_results.txt

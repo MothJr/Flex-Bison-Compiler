@@ -7,8 +7,9 @@
 
 using namespace std;
 
-#include "listing.h"
+#include "listing.h" 
 
+extern char *yytext;
 int yylex();
 void yyerror(const char* message);
 
@@ -19,9 +20,13 @@ void yyerror(const char* message);
 %token IDENTIFIER
 %token INT_LITERAL
 %token REAL_LITERAL
-%token BOOLEAN_LITERAL
-
-%token ADDOP MULOP RELOP ANDOP REMOP EXPOP OROP NOTOP REPOP
+%token BOOL_LITERAL
+%token OROP
+%token ANDOP
+%token RELOP REMOP NOTOP REPOP
+%token ADDOP
+%token MULOP
+%token EXPOP
 
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS 
 %token IF THEN WHEN ELSE ENDIF CASE OTHERS ARROW ENDCASE REAL  
@@ -29,24 +34,30 @@ void yyerror(const char* message);
 %%
 
 function:	
-	function_header '{' variable '}' body ;
+	function_header optional_variable body ;
 	
 function_header:	
-	FUNCTION IDENTIFIER '[' parameters ']' RETURNS type ';' ;
+	FUNCTION IDENTIFIER optional_parameter RETURNS type ';' |
+	error ;
+
+optional_variable: 
+	optional_variable variable |
+	;
 
 variable:
-	IDENTIFIER ':' type IS statement ;
+	IDENTIFIER ':' type IS statement_ |
+	error ;
 
-parameters: 
-	parameter '{'',' parameter '}'
+optional_parameter:
+	optional_parameter RETURNS type ';' |
+	parameter ;	
 
 parameter:
-	IDENTIFIER ':' type
+	IDENTIFIER ':' type |
+	;
 
 type:
-	INTEGER |
-	REAL |
-	BOOLEAN ;
+	INTEGER | REAL | BOOLEAN ;
 
 body:
 	BEGIN_ statement_ END ';' ;
@@ -56,34 +67,34 @@ statement_:
 	error ';' ;
 	
 statement:
-	expression ';' |
-	REDUCE operator '{' reductions '}' ENDREDUCE ';' |
-	CASE expression IS '{' case '}' OTHERS ARROW statement ENDCASE ';' ;
+	expression |
+	REDUCE operator reductions ENDREDUCE |
+	IF expression THEN statement_ ELSE statement_ ENDIF |
+	CASE expression IS optional_cases OTHERS ARROW statement_ ENDCASE ;
 
 operator:
 	ADDOP |
-	MULOP ;
+	MULOP REMOP |
+	EXPOP ;
+
+optional_cases:
+	optional_cases case |
+	;
 
 case: 
-	WHEN INT_LITERAL ARROW statement
+	WHEN INT_LITERAL ARROW statement_ ;
 
 reductions:
 	reductions statement_ |
 	;
 		    
 expression:
-	'(' expression ')' |
-	expression binary_operator expression |
-	NOTOP expression |
-	INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
-	IDENTIFIER
-
-expression:
 	expression ANDOP relation |
-	relation ;
+	expression_ ;
 
-binary_operator: 
-	ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP
+expression_:
+	expression OROP relation |
+	relation ;
 
 relation:
 	relation RELOP term |
@@ -95,11 +106,20 @@ term:
       
 factor:
 	factor MULOP primary |
+	factor REMOP |
+	exponent ;
+
+exponent:
+	factor EXPOP notion |
+	notion ;
+
+notion:
+	notion NOTOP primary |
 	primary ;
 
 primary:
 	'(' expression ')' |
-	INT_LITERAL | 
+	INT_LITERAL | REAL_LITERAL | BOOL_LITERAL
 	IDENTIFIER ;
     
 %%
@@ -107,6 +127,23 @@ primary:
 void yyerror(const char* message)
 {
 	appendError(SYNTAX, message);
+	
 }
 
-
+int main()
+{
+	firstLine();
+	
+	// FILE *file = fopen("lexemes.txt", "wa"); 
+	// int token = yylex();
+	// while (token)
+	// {
+	// 	fprintf(file, "%d %s\n", token, yytext);
+	// 	token = yylex();
+	// }
+	//yylex();
+	yyparse();
+	lastLine();
+	// fclose(file);
+	return 0;
+}
