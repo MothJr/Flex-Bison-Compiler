@@ -1,5 +1,5 @@
-/* Compiler Theory and Design
-   Dr. Duane J. Jarc */
+/* Compiler Theory and Design */
+   /* Tim McNeill */
 
 /* This file contains flex input file */
 

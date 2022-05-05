@@ -544,10 +544,10 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "scanner.l"
-/* Compiler Theory and Design
-   Dr. Duane J. Jarc */
+/* Compiler Theory and Design */
+#line 3 "scanner.l"
+   /* Tim McNeill */
 /* This file contains flex input file */
-#line 7 "scanner.l"
 #include <cstdio>
 #include <string>
 

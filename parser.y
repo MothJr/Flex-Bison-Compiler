@@ -9,6 +9,7 @@ using namespace std;
 
 #include "listing.h" 
 
+
 extern char *yytext;
 int yylex();
 void yyerror(const char* message);
@@ -41,8 +42,8 @@ function_header:
 	error ;
 
 optional_variable: 
-	optional_variable variable |
-	;
+	variable optional_variable |
+	%empty ;
 
 variable:
 	IDENTIFIER ':' type IS statement_ |
@@ -54,10 +55,12 @@ optional_parameter:
 
 parameter:
 	IDENTIFIER ':' type |
-	;
+	%empty ;
 
 type:
-	INTEGER | REAL | BOOLEAN ;
+	INTEGER | 
+	REAL | 
+	BOOLEAN ;
 
 body:
 	BEGIN_ statement_ END ';' ;
@@ -78,22 +81,23 @@ operator:
 	EXPOP ;
 
 optional_cases:
-	optional_cases case |
-	;
+	case optional_cases |
+	%empty ;
 
 case: 
-	WHEN INT_LITERAL ARROW statement_ ;
+	WHEN INT_LITERAL ARROW statement_ | 
+	error ;
 
 reductions:
 	reductions statement_ |
-	;
+	%empty ;
 		    
 expression:
 	expression ANDOP relation |
 	expression_ ;
 
 expression_:
-	expression OROP relation |
+	expression_ OROP relation |
 	relation ;
 
 relation:
@@ -119,10 +123,11 @@ notion:
 
 primary:
 	'(' expression ')' |
-	INT_LITERAL | REAL_LITERAL | BOOL_LITERAL
+	INT_LITERAL | REAL_LITERAL | BOOL_LITERAL |
 	IDENTIFIER ;
-    
+
 %%
+
 
 void yyerror(const char* message)
 {
@@ -130,9 +135,15 @@ void yyerror(const char* message)
 	
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+	
 	firstLine();
+	yyparse();
+	lastLine();
+	
+	return 0;
+
 	
 	// FILE *file = fopen("lexemes.txt", "wa"); 
 	// int token = yylex();
@@ -142,8 +153,6 @@ int main()
 	// 	token = yylex();
 	// }
 	//yylex();
-	yyparse();
-	lastLine();
 	// fclose(file);
-	return 0;
+	
 }
