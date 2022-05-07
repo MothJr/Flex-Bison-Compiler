@@ -6,5 +6,5 @@ begin
          2 + 8;
          6;
          3;
-    endreduce;    
+        
 end;

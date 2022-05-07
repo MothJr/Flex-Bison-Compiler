@@ -1,20 +1,21 @@
 .SILENT: test
+.SILENT: test_error
 
 default:
 	make test
 
-compile: scanner.o parser.o listing.o
-	g++ -o compile scanner.o parser.o listing.o
+compile: scanner.o parser.o listing.o values.o
+	g++ -o compile scanner.o parser.o listing.o values.o
 	rm *.o
 	
-scanner.o: scanner.c listing.h tokens.h
+scanner.o: scanner.c values.h listing.h tokens.h
 	g++ -c scanner.c
 
 scanner.c: scanner.l
 	flex scanner.l
 	mv lex.yy.c scanner.c
 
-parser.o: parser.c listing.h 
+parser.o: parser.c values.h listing.h symbols.h
 	g++ -c parser.c
 
 parser.c tokens.h: parser.y
@@ -24,6 +25,9 @@ parser.c tokens.h: parser.y
 
 listing.o: listing.cc listing.h
 	g++ -c listing.cc
+
+values.o: values.cc values.h
+	g++ -c values.cc
 
 test1:
 	make compile
@@ -73,4 +77,61 @@ test:
 
 test_log: 
 	make test > test_results.txt
+
+
+test1_error:
+	make compile
+	./compile < Test_Files_Errors/test1_error.txt
+
+test2_error:
+	make compile
+	./compile < Test_Files_Errors/test2_error.txt
+
+test3_error:
+	make compile
+	./compile < Test_Files_Errors/test3_error.txt
+
+test4_error:
+	make compile
+	./compile < Test_Files_Errors/test4_error.txt
+
+test5_error:
+	make compile
+	./compile < Test_Files_Errors/test5_error.txt
+
+test6_error:
+	make compile
+	./compile < Test_Files_Errors/test6_error.txt
+
+test_error: 
+	echo  "***** BUILDING EXECUTABLE *****"
+	echo
+	make compile
+	echo
+	echo "***** RUNNING TEST_ERROR CASE 1 *****"
+	echo
+	./compile < Test_Files_Errors/test1_error.txt
+	echo
+	echo "***** RUNNING TEST_ERROR CASE 2 *****"
+	echo
+	./compile < Test_Files_Errors/test2_error.txt
+	echo
+	echo "***** RUNNING TEST_ERROR CASE 3 *****"
+	echo
+	./compile < Test_Files_Errors/test3_error.txt
+	echo
+	echo "***** RUNNING TEST_ERROR CASE 4 *****"
+	echo
+	./compile < Test_Files_Errors/test4_error.txt
+	echo
+	echo "***** RUNNING TEST_ERROR CASE 5 *****"
+	echo
+	./compile < Test_Files_Errors/test5_error.txt
+	echo
+	echo "***** RUNNING TEST_ERROR CASE 6 *****"
+	echo
+	./compile < Test_Files_Errors/test6_error.txt
+	
+test_error_log: 
+	make test_error > test_errors_results.txt
 

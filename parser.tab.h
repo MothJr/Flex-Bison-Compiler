@@ -53,21 +53,21 @@ extern int yydebug;
     INT_LITERAL = 259,
     REAL_LITERAL = 260,
     BOOL_LITERAL = 261,
-    OROP = 262,
-    ANDOP = 263,
+    ADDOP = 262,
+    MULOP = 263,
     RELOP = 264,
     REMOP = 265,
     NOTOP = 266,
     REPOP = 267,
-    ADDOP = 268,
-    MULOP = 269,
-    EXPOP = 270,
-    BEGIN_ = 271,
-    BOOLEAN = 272,
-    END = 273,
-    ENDREDUCE = 274,
-    FUNCTION = 275,
-    INTEGER = 276,
+    EXPOP = 268,
+    ANDOP = 269,
+    OROP = 270,
+    INTEGER = 271,
+    BEGIN_ = 272,
+    BOOLEAN = 273,
+    END = 274,
+    ENDREDUCE = 275,
+    FUNCTION = 276,
     IS = 277,
     REDUCE = 278,
     RETURNS = 279,
@@ -86,7 +86,18 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 32 "parser.y"
+
+	CharPtr iden;
+	Operators oper;
+	int value;
+
+#line 98 "parser.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

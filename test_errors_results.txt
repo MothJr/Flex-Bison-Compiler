@@ -1,0 +1,122 @@
+make[1]: Entering directory '/home/tmac/CMSC_430/Project_2/430_Project_2'
+***** BUILDING EXECUTABLE *****
+
+make[2]: Entering directory '/home/tmac/CMSC_430/Project_2/430_Project_2'
+g++ -c scanner.c
+g++ -c parser.c
+g++ -c listing.cc
+g++ -o compile scanner.o parser.o listing.o
+rm *.o
+make[2]: Leaving directory '/home/tmac/CMSC_430/Project_2/430_Project_2'
+
+***** RUNNING TEST_ERROR CASE 1 *****
+
+
+   1  -- Function with arithmetic expression
+   2  
+   3  function test1 returns integer;
+   4  begin
+   5      7 + 2 * 2  + 4);
+syntax error, unexpected ')', expecting ANDOP or ';'
+   6  end;
+   7  
+     
+Lexical Errors: 0
+Semantic Errors: 0
+Syntactical Errors: 1
+
+***** RUNNING TEST_ERROR CASE 2 *****
+
+
+   1  -- Function with an Integer Variable
+   2  
+   3  function test2 integer;
+syntax error, unexpected INTEGER, expecting RETURNS
+   4      b: integer is 9 * 2 + 8;
+   5  begin
+   6      b + 2 * 8;    
+   7  end;
+   8  
+     
+Lexical Errors: 0
+Semantic Errors: 0
+Syntactical Errors: 1
+
+***** RUNNING TEST_ERROR CASE 3 *****
+
+
+   1  -- Function with an Boolean Variable
+   2  
+   3  test3 returns boolean;
+syntax error, unexpected IDENTIFIER, expecting FUNCTION
+   4      b: boolean is 5 < 2;
+   5  begin
+   6      b and 2 < 8 + 1 * 7;    
+   7  end;
+   8  
+     
+Lexical Errors: 0
+Semantic Errors: 0
+Syntactical Errors: 1
+
+***** RUNNING TEST_ERROR CASE 4 *****
+
+
+   1  -- Function with a Reduction
+   2  
+   3  function test4 returns integer;
+   4  begin
+   5      reduce *
+   6           2 + 8;
+   7           6;
+   8           3;
+   9          
+  10  end;
+syntax error, unexpected END
+  11  
+     
+Lexical Errors: 0
+Semantic Errors: 0
+Syntactical Errors: 1
+
+***** RUNNING TEST_ERROR CASE 5 *****
+
+
+   1  -- Missing operator in expression
+   2  
+   3  function test5 returns integer;
+   4  begin
+   5      8 and 2 9 * 3;    
+syntax error, unexpected INT_LITERAL, expecting ANDOP or ';'
+   6  end;
+   7  
+     
+Lexical Errors: 0
+Semantic Errors: 0
+Syntactical Errors: 1
+
+***** RUNNING TEST_ERROR CASE 6 *****
+
+
+   1  -- Multiple errors
+   2  
+   3  function main a integer returns real;
+syntax error, unexpected INTEGER, expecting ':'
+   4      b: integer is * 2;
+syntax error, unexpected MULOP
+   5      c: real is 6.0;
+   6  begin
+   7      if a > c then
+   8          b 3.0;
+syntax error, unexpected REAL_LITERAL, expecting ANDOP or ';'
+   9      else
+  10          b = 4.;
+  11      endif;
+  12  ;
+syntax error, unexpected ';', expecting END
+  13  
+     
+Lexical Errors: 0
+Semantic Errors: 0
+Syntactical Errors: 4
+make[1]: Leaving directory '/home/tmac/CMSC_430/Project_2/430_Project_2'

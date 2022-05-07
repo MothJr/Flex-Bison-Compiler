@@ -1,6 +1,6 @@
 -- Function with an Integer Variable
 
-function test2 returns integer;
+function test2 integer;
     b: integer is 9 * 2 + 8;
 begin
     b + 2 * 8;    

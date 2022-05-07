@@ -1,7 +1,8 @@
-/* Compiler Theory and Design */
-   /* Tim McNeill */
-
-/* This file contains flex input file */
+   /* Tim McNeill
+   Lexical Analyzer
+   5 May 2022
+   This file holds all lexemes and their assigned tokens 
+   */
 
 %{
 #include <cstdio>
@@ -9,9 +10,9 @@
 
 using namespace std;
 
+#include "values.h"
 #include "listing.h"
 #include "tokens.h"
-#include "parser.tab.h"
 
 %}
 
@@ -34,11 +35,11 @@ real_literal	[0-9]+\.[0-9]*([e|E]([\+|\-][0-9]+))?
 {line_comment}	{ ECHO; nextLine();}
 {line}		{ ECHO; nextLine();}
 {real_literal}	{ ECHO; return(REAL_LITERAL); }
-"<"		{ ECHO; return(RELOP); }
+"<"		{ ECHO; yylval.oper = LESS; return(RELOP); }
 "=>"	{ ECHO; return(ARROW);}
-"+"		{ ECHO; return(ADDOP); }
+"+"		{ ECHO; yylval.oper = ADD; return(ADDOP); }
 "-"		{ ECHO; return(ADDOP); }
-"*"		{ ECHO; return(MULOP); }
+"*"		{ ECHO; yylval.oper = MULTIPLY; return(MULOP); }
 "/"		{ ECHO; return(MULOP); }
 "="		{ ECHO; return(RELOP); }
 "/="	{ ECHO; return(RELOP); }
@@ -70,8 +71,9 @@ when	{ ECHO; return(WHEN); }
 or	{ ECHO; return(OROP); }
 not	{ ECHO; return(NOTOP); }
 rem { ECHO; return(REMOP); }
-{id}		{ ECHO; return(IDENTIFIER);}
-{int}		{ ECHO; return(INT_LITERAL); }
+{id}		{ ECHO; yylval.iden = (CharPtr)malloc(yyleng + 1); 
+			strcpy(yylval.iden, yytext); return(IDENTIFIER);}
+{int}		{ ECHO; yylval.value = atoi(yytext); return(INT_LITERAL); }
 {punc}		{ ECHO; return(yytext[0]); }
 .		{ ECHO; appendError(LEXICAL, yytext); }
 %%

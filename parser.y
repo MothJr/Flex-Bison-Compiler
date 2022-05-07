@@ -1,41 +1,56 @@
-/* Compiler Theory and Design
-   Dr. Duane J. Jarc */
+   /* Tim McNeill
+   Syntactical Analyzer
+   5 May 2022
+    
+   */
 
 %{
 
+#include <iostream>
 #include <string>
+#include <vector>
+#include <map>
 
 using namespace std;
 
 #include "listing.h" 
+#include "values.h"
+#include "symbols.h"
 
-
-extern char *yytext;
 int yylex();
 void yyerror(const char* message);
+
+Symbols<int> symbols;
+
+int result; 
 
 %}
 
 %define parse.error verbose
 
-%token IDENTIFIER
-%token INT_LITERAL
-%token REAL_LITERAL
-%token BOOL_LITERAL
-%token OROP
-%token ANDOP
-%token RELOP REMOP NOTOP REPOP
-%token ADDOP
-%token MULOP
-%token EXPOP
+%union
+{
+	CharPtr iden;
+	Operators oper;
+	int value;
+}
 
-%token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS 
-%token IF THEN WHEN ELSE ENDIF CASE OTHERS ARROW ENDCASE REAL  
+%token <iden> IDENTIFIER
+%token <value> INT_LITERAL REAL_LITERAL BOOL_LITERAL
+
+%token <oper> ADDOP MULOP RELOP REMOP NOTOP REPOP EXPOP ANDOP OROP
+
+%token INTEGER
+%token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION IS REDUCE RETURNS 
+%token <value> IF THEN WHEN ELSE ENDIF CASE OTHERS ARROW ENDCASE REAL  
+
+%type <value> body statement_ statement reductions expression relation term factor primary exponent notion
+%type <oper> operator
 
 %%
 
 function:	
-	function_header optional_variable body ;
+	function_header optional_variable body {result = $3;} ;
 	
 function_header:	
 	FUNCTION IDENTIFIER optional_parameter RETURNS type ';' |
@@ -46,7 +61,7 @@ optional_variable:
 	%empty ;
 
 variable:
-	IDENTIFIER ':' type IS statement_ |
+	IDENTIFIER ':' type IS statement_ {symbols.insert($1, $5);} |
 	error ;
 
 optional_parameter:
@@ -63,22 +78,30 @@ type:
 	BOOLEAN ;
 
 body:
-	BEGIN_ statement_ END ';' ;
+	BEGIN_ statement_ END ';' {$$ = $2;} ;
     
 statement_:
-	statement ';' |
-	error ';' ;
+	statement |
+	error {$$ = 0;} ;
 	
 statement:
-	expression |
-	REDUCE operator reductions ENDREDUCE |
-	IF expression THEN statement_ ELSE statement_ ENDIF |
-	CASE expression IS optional_cases OTHERS ARROW statement_ ENDCASE ;
+	expression ';' |
+	REDUCE operator reductions ENDREDUCE ';' {$$ = $3;} |
+	IF expression THEN statement_ ELSE statement_ ENDIF ';' |
+	CASE expression IS optional_cases OTHERS ARROW statement_ ENDCASE ';' ;
 
 operator:
+	OROP |
+	ANDOP |
+	RELOP |
 	ADDOP |
-	MULOP REMOP |
-	EXPOP ;
+	MULOP | REMOP 
+	| EXPOP |
+	NOTOP ;
+
+reductions:
+	reductions statement_ {$$ = evaluateReduction($<oper>0, $1, $2);} |
+	%empty {$$ = $<oper>0 == ADD ? 0 : 1;} ;
 
 optional_cases:
 	case optional_cases |
@@ -87,30 +110,22 @@ optional_cases:
 case: 
 	WHEN INT_LITERAL ARROW statement_ | 
 	error ;
-
-reductions:
-	reductions statement_ |
-	%empty ;
-		    
+	    
 expression:
-	expression ANDOP relation |
-	expression_ ;
-
-expression_:
-	expression_ OROP relation |
+	expression ANDOP relation {$$ = $1 && $3;} |
 	relation ;
 
 relation:
-	relation RELOP term |
+	relation RELOP term {$$ = evaluateRelational($1, $2, $3);} |
 	term ;
 
 term:
-	term ADDOP factor |
+	term ADDOP factor {$$ = evaluateArithmetic($1, $2, $3);} |
 	factor ;
       
 factor:
-	factor MULOP primary |
-	factor REMOP |
+	factor MULOP primary {$$ = evaluateArithmetic($1, $2, $3);} |
+	factor REMOP primary {$$ = evaluateArithmetic($1, $2, $3);} |
 	exponent ;
 
 exponent:
@@ -122,9 +137,9 @@ notion:
 	primary ;
 
 primary:
-	'(' expression ')' |
+	'(' expression ')' {$$ = $2;} |
 	INT_LITERAL | REAL_LITERAL | BOOL_LITERAL |
-	IDENTIFIER ;
+	IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);} ;
 
 %%
 
@@ -140,19 +155,10 @@ int main(int argc, char *argv[])
 	
 	firstLine();
 	yyparse();
-	lastLine();
+
+	if (lastLine() == 0)
+		printf("Result = %d\n", result);
 	
 	return 0;
-
-	
-	// FILE *file = fopen("lexemes.txt", "wa"); 
-	// int token = yylex();
-	// while (token)
-	// {
-	// 	fprintf(file, "%d %s\n", token, yytext);
-	// 	token = yylex();
-	// }
-	//yylex();
-	// fclose(file);
 	
 }

@@ -1,0 +1,5 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/tmac/CMSC_430/Project_3'
+make test
+make: Leaving directory '/home/tmac/CMSC_430/Project_3'
+ 
