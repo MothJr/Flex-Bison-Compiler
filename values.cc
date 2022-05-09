@@ -30,15 +30,6 @@ int evaluateLogical(int left, Operators operator_, int right)
 		case OR:
 			result = left || right;
 			break;
-		case NOT:
-			if (left)
-			{
-				result = !left == false;
-			} else 
-			{
-				result = !left == true;
-			}		
-			break;
 	}
 	return result;
 }
@@ -52,13 +43,19 @@ int evaluateRelational(int left, Operators operator_, int right)
 			result = left < right;
 			break;
 		case TO:
-			if (left) {}
+			if (left == true)
+			{
+				right;
+			}
 			break;
 		case EQUALS:
 			result = left == right;
 			break;
 		case ASSIGNQUOTIENT:
-			result = left /= right;
+			if (right != 0)
+			{
+				result = left /= right;
+			}
 			break;
 		case GREATER: 
 			result = left > right;
@@ -94,7 +91,10 @@ int evaluateArithmetic(int left, Operators operator_, int right)
 			}
 			break;
 		case REMAINDER:
-			result = left % right;
+			if (right != 0) 
+			{
+				result = left % right;
+			} 
 			break;
 	}
 	return result;

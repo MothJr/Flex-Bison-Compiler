@@ -988,7 +988,7 @@ YY_RULE_SETUP
 case 30:
 YY_RULE_SETUP
 #line 62 "scanner.l"
-{ ECHO; return(CASE); }
+{ ECHO; yylval.value = atoi(yytext); return(CASE); }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
@@ -998,7 +998,7 @@ YY_RULE_SETUP
 case 32:
 YY_RULE_SETUP
 #line 64 "scanner.l"
-{ ECHO; return(ENDCASE); }
+{ ECHO; yylval.value = atoi(yytext); return(ENDCASE); }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
@@ -1013,7 +1013,7 @@ YY_RULE_SETUP
 case 35:
 YY_RULE_SETUP
 #line 67 "scanner.l"
-{ ECHO; return(OTHERS); }
+{ ECHO; yylval.value = atoi(yytext); return(OTHERS); }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
@@ -1028,7 +1028,7 @@ YY_RULE_SETUP
 case 38:
 YY_RULE_SETUP
 #line 70 "scanner.l"
-{ ECHO; return(WHEN); }
+{ ECHO; yylval.value = atoi(yytext); return(WHEN); }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP

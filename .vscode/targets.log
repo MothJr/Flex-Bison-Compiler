@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat May  7 15:20:05 2022
+# Make data base, printed on Mon May  9 02:52:14 2022
 
 # Variables
 
@@ -55,7 +55,7 @@ PATH = /home/tmac/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47/bi
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-ae0766e2-2503-4733-b902-15b30c31c17c.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-b9ae986e-47d9-421e-9532-4da319dbb236.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -69,7 +69,7 @@ PWD = /home/tmac/CMSC_430/Project_3
 # default
 .LOADED := 
 # environment
-WSL_INTEROP = /run/WSL/9_interop
+WSL_INTEROP = /run/WSL/20890_interop
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
@@ -278,6 +278,7 @@ makefile:
 
 # Not a target:
 symbols.h:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -315,7 +316,6 @@ default:
 test3_error:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 91):
 	make compile
@@ -485,6 +485,6 @@ listing.h:
 # strcache performance: lookups = 106 / hit rate = 51%
 # hash-table stats:
 # Load=51/8192=1%, Rehash=0, Collisions=1/106=1%
-# Finished Make data base on Sat May  7 15:20:05 2022
+# Finished Make data base on Mon May  9 02:52:14 2022
 
  

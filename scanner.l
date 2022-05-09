@@ -59,15 +59,15 @@ is		      { ECHO; return(IS); }
 reduce		{ ECHO; return REDUCE; }
 returns		{ ECHO; return(RETURNS); }
 and		{ ECHO; yylval.oper = AND; return(ANDOP); }
-case	{ ECHO; return(CASE); }
+case	{ ECHO; yylval.value = atoi(yytext); return(CASE); }
 else	{ ECHO; return(ELSE); }
-endcase	{ ECHO; return(ENDCASE); }
+endcase	{ ECHO; yylval.value = atoi(yytext); return(ENDCASE); }
 endif	{ ECHO; return(ENDIF); }
 if	   { ECHO; return(IF); }
-others	{ ECHO; return(OTHERS); }
+others	{ ECHO; yylval.value = atoi(yytext); return(OTHERS); }
 real	{ ECHO; return(REAL); }
 then	{ ECHO; return(THEN); }
-when	{ ECHO; return(WHEN); }
+when	{ ECHO; yylval.value = atoi(yytext); return(WHEN); }
 or	   { ECHO; yylval.oper = OR; return(OROP); }
 not	{ ECHO; yylval.oper = NOT; return(NOTOP); }
 rem   { ECHO; yylval.oper = REMAINDER; return(REMOP); }

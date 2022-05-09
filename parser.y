@@ -26,9 +26,7 @@ void yyerror(const char* message);
 Symbols<int> symbols;
 
 int result; 
-int*parameters;
-int counter = 0;
-int numParams;
+int *numParams;
 
 %}
 
@@ -42,16 +40,15 @@ int numParams;
 }
 
 %token <iden> IDENTIFIER
-%token <value> INT_LITERAL REAL_LITERAL BOOL_LITERAL
+%token <value> INT_LITERAL REAL_LITERAL BOOL_LITERAL CASE TRUE FALSE IS WHEN 
 
-%token <oper> ADDOP MULOP RELOP REMOP NOTOP EXPOP ANDOP OROP
+%token <oper> ADDOP MULOP RELOP REMOP NOTOP EXPOP ANDOP OROP 
 
-%token INTEGER
-%token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION IS REDUCE RETURNS 
-%token <value> IF THEN WHEN ELSE ENDIF CASE OTHERS ARROW ENDCASE REAL 
+%token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER REDUCE RETURNS 
+%token IF THEN ELSE ENDIF REAL ENDCASE OTHERS ARROW 
 
 %type <value> body statement_ statement reductions expression relation term factor binary primary exponent unary
-				case optional_cases 
+				case optional_cases cases_
 %type <oper> operator
 
 %%
@@ -80,7 +77,7 @@ optional_parameter:
 	%empty ;
 
 parameter:
-	IDENTIFIER ':' type {symbols.insert($1, parameters[counter++]);};
+	IDENTIFIER ':' type {symbols.insert($1, numParams[0]);};
 
 type:
 	INTEGER | 
@@ -98,8 +95,19 @@ statement:
 	expression ';' |
 	REDUCE operator reductions ENDREDUCE ';' {$$ = $3;} |
 	IF expression THEN statement_ ELSE statement_ ENDIF ';' {$$ = ($2) ? $4 : $6;} |
-	CASE expression IS optional_cases OTHERS ARROW statement_ ENDCASE ';' {$$ = isnan($4) ? $7 : $4;} ;
+	CASE expression IS cases_ OTHERS ARROW statement_ ENDCASE ';' {$$ = $<value>4 == $1 ? $4 : $7;} ;
 
+cases_:
+	cases_ optional_cases {$$ = $<value>1 == $1 ? $1 : $2;} |
+	%empty {$$ = NAN;} ;
+
+optional_cases:
+	case |
+	error ';' {$$ = 0;} ;
+
+case: 
+	WHEN INT_LITERAL ARROW statement_ {$$ = $<value>-2 == $2 ? $4 : NAN;} ;
+	
 operator:
 	OROP |
 	ANDOP |
@@ -108,13 +116,6 @@ operator:
 	MULOP | REMOP 
 	| EXPOP |
 	NOTOP ;
-
-optional_cases:
-	optional_cases case {$$ = isnan($1) ? $2 : $1;} |
-	error {$$ = 0;} ;
-
-case: 
-	WHEN INT_LITERAL ARROW statement_ {$$ = $<value>-2 == $2 ? $4 : NAN;} ; 
 
 reductions:
 	reductions statement_ {$$ = evaluateReduction($<oper>0, $1, $2);} |
@@ -146,7 +147,7 @@ exponent:
 	exponent EXPOP exponent {$$ = pow($1, $3);} ;
 	
 unary:
-	NOTOP primary {$$ = $2;} |
+	NOTOP primary {$$ = !$2;} |
 	primary ;
 
 primary:
@@ -165,7 +166,13 @@ void yyerror(const char* message)
 
 int main(int argc, char *argv[])
 {
-	
+	numParams = new int[argc-1];
+
+	for (int i = 1; i < argc; ++i)
+	{
+		numParams[i-1] = atof(argv[i]);
+	}
+
 	firstLine();
 	yyparse();
 
