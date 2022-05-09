@@ -30,47 +30,47 @@ punc		[\(\),:;]
 real_literal	[0-9]+\.[0-9]*([e|E]([\+|\-][0-9]+))?
 %%
 
-{ws}		{ ECHO; }
-{comment}	{ ECHO; nextLine();}
+{ws}		      { ECHO; }
+{comment}	   { ECHO; nextLine();}
 {line_comment}	{ ECHO; nextLine();}
-{line}		{ ECHO; nextLine();}
-{real_literal}	{ ECHO; return(REAL_LITERAL); }
+{line}		   { ECHO; nextLine();}
+{real_literal}	{ ECHO; yylval.value = atoi(yytext); return(REAL_LITERAL); }
 "<"		{ ECHO; yylval.oper = LESS; return(RELOP); }
-"=>"	{ ECHO; return(ARROW);}
+"=>"	   { ECHO; yylval.oper = TO; return(ARROW);}
 "+"		{ ECHO; yylval.oper = ADD; return(ADDOP); }
-"-"		{ ECHO; return(ADDOP); }
+"-"		{ ECHO; yylval.oper = SUBTRACT; return(ADDOP); }
 "*"		{ ECHO; yylval.oper = MULTIPLY; return(MULOP); }
-"/"		{ ECHO; return(MULOP); }
-"="		{ ECHO; return(RELOP); }
-"/="	{ ECHO; return(RELOP); }
-">"		{ ECHO; return(RELOP); }
-">="	{ ECHO; return(RELOP); }
-"<="	{ ECHO; return(RELOP); }
-"* *"	{ ECHO; return(REPOP); }
-begin		{ ECHO; return(BEGIN_); }
+"/"		{ ECHO; yylval.oper = DIVIDE; return(MULOP); }
+"="		{ ECHO; yylval.oper = EQUALS; return(RELOP); }
+"/="	   { ECHO; yylval.oper = ASSIGNQUOTIENT; return(RELOP); }
+">"		{ ECHO; yylval.oper = GREATER; return(RELOP); }
+">="	   { ECHO; yylval.oper = GREATEROREQUAL; return(RELOP); }
+"<="	   { ECHO; yylval.oper = LESSOREQUAL; return(RELOP); }
+"**"	   { ECHO; yylval.oper = EXPONENT; return(EXPOP); }
+begin		   { ECHO; return(BEGIN_); }
 boolean		{ ECHO; return(BOOLEAN); }
-true	{ ECHO; return(BOOL_LITERAL); }
-false	{ ECHO; return(BOOL_LITERAL); }
-end		{ ECHO; return(END); }
+true	{ ECHO; yylval.value = atoi(yytext); return(BOOL_LITERAL); }
+false	{ ECHO; yylval.value = atoi(yytext); return(BOOL_LITERAL); }
+end		   { ECHO; return(END); }
 endreduce	{ ECHO; return(ENDREDUCE); }
-function	{ ECHO; return(FUNCTION); }
+function	   { ECHO; return(FUNCTION); }
 integer		{ ECHO; return(INTEGER); }
-is		{ ECHO; return(IS); }
+is		      { ECHO; return(IS); }
 reduce		{ ECHO; return REDUCE; }
 returns		{ ECHO; return(RETURNS); }
-and		{ ECHO; return(ANDOP); }
+and		{ ECHO; yylval.oper = AND; return(ANDOP); }
 case	{ ECHO; return(CASE); }
 else	{ ECHO; return(ELSE); }
 endcase	{ ECHO; return(ENDCASE); }
 endif	{ ECHO; return(ENDIF); }
-if	{ ECHO; return(IF); }
+if	   { ECHO; return(IF); }
 others	{ ECHO; return(OTHERS); }
 real	{ ECHO; return(REAL); }
 then	{ ECHO; return(THEN); }
 when	{ ECHO; return(WHEN); }
-or	{ ECHO; return(OROP); }
-not	{ ECHO; return(NOTOP); }
-rem { ECHO; return(REMOP); }
+or	   { ECHO; yylval.oper = OR; return(OROP); }
+not	{ ECHO; yylval.oper = NOT; return(NOTOP); }
+rem   { ECHO; yylval.oper = REMAINDER; return(REMOP); }
 {id}		{ ECHO; yylval.iden = (CharPtr)malloc(yyleng + 1); 
 			strcpy(yylval.iden, yytext); return(IDENTIFIER);}
 {int}		{ ECHO; yylval.value = atoi(yytext); return(INT_LITERAL); }

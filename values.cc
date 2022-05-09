@@ -19,6 +19,29 @@ int evaluateReduction(Operators operator_, int head, int tail)
 	return head * tail;
 }
 
+int evaluateLogical(int left, Operators operator_, int right)
+{
+	int result;
+	switch(operator_)
+	{
+		case AND:
+			result = left && right;
+			break;
+		case OR:
+			result = left || right;
+			break;
+		case NOT:
+			if (left)
+			{
+				result = !left == false;
+			} else 
+			{
+				result = !left == true;
+			}		
+			break;
+	}
+	return result;
+}
 
 int evaluateRelational(int left, Operators operator_, int right)
 {
@@ -27,6 +50,24 @@ int evaluateRelational(int left, Operators operator_, int right)
 	{
 		case LESS:
 			result = left < right;
+			break;
+		case TO:
+			if (left) {}
+			break;
+		case EQUALS:
+			result = left == right;
+			break;
+		case ASSIGNQUOTIENT:
+			result = left /= right;
+			break;
+		case GREATER: 
+			result = left > right;
+			break;
+		case GREATEROREQUAL:
+			result = left >= right;
+			break;
+		case LESSOREQUAL:
+			result = left <= right;
 			break;
 	}
 	return result;
@@ -42,6 +83,18 @@ int evaluateArithmetic(int left, Operators operator_, int right)
 			break;
 		case MULTIPLY:
 			result = left * right;
+			break;
+		case SUBTRACT:
+			result = left - right;
+			break;
+		case DIVIDE:
+			if (right != 0) 
+			{
+				result = left / right;
+			}
+			break;
+		case REMAINDER:
+			result = left % right;
 			break;
 	}
 	return result;

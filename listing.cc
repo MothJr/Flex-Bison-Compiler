@@ -95,6 +95,9 @@ void incrementErrorType(ErrorCategories errorCategory)
 	case ErrorCategories::SYNTAX:
 		syntactic++;
 		break;
+	case ErrorCategories::UNDECLARED:
+		semantic++;
+		break;
 	default:
 		break;
 	}

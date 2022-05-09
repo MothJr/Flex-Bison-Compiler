@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cmath>
+#include <math.h>
 
 using namespace std;
 
@@ -17,12 +19,16 @@ using namespace std;
 #include "values.h"
 #include "symbols.h"
 
+extern char *yytext;
 int yylex();
 void yyerror(const char* message);
 
 Symbols<int> symbols;
 
 int result; 
+int*parameters;
+int counter = 0;
+int numParams;
 
 %}
 
@@ -38,13 +44,14 @@ int result;
 %token <iden> IDENTIFIER
 %token <value> INT_LITERAL REAL_LITERAL BOOL_LITERAL
 
-%token <oper> ADDOP MULOP RELOP REMOP NOTOP REPOP EXPOP ANDOP OROP
+%token <oper> ADDOP MULOP RELOP REMOP NOTOP EXPOP ANDOP OROP
 
 %token INTEGER
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION IS REDUCE RETURNS 
-%token <value> IF THEN WHEN ELSE ENDIF CASE OTHERS ARROW ENDCASE REAL  
+%token <value> IF THEN WHEN ELSE ENDIF CASE OTHERS ARROW ENDCASE REAL 
 
-%type <value> body statement_ statement reductions expression relation term factor primary exponent notion
+%type <value> body statement_ statement reductions expression relation term factor binary primary exponent unary
+				case optional_cases 
 %type <oper> operator
 
 %%
@@ -53,8 +60,9 @@ function:
 	function_header optional_variable body {result = $3;} ;
 	
 function_header:	
-	FUNCTION IDENTIFIER optional_parameter RETURNS type ';' |
-	error ;
+	FUNCTION IDENTIFIER parameters RETURNS type ';' |
+	FUNCTION IDENTIFIER RETURNS type ';' |
+	error ';' ;
 
 optional_variable: 
 	variable optional_variable |
@@ -64,13 +72,15 @@ variable:
 	IDENTIFIER ':' type IS statement_ {symbols.insert($1, $5);} |
 	error ;
 
+parameters:
+	parameter optional_parameter ;
+
 optional_parameter:
-	optional_parameter RETURNS type ';' |
-	parameter ;	
+	optional_parameter ',' parameter |
+	%empty ;
 
 parameter:
-	IDENTIFIER ':' type |
-	%empty ;
+	IDENTIFIER ':' type {symbols.insert($1, parameters[counter++]);};
 
 type:
 	INTEGER | 
@@ -87,8 +97,8 @@ statement_:
 statement:
 	expression ';' |
 	REDUCE operator reductions ENDREDUCE ';' {$$ = $3;} |
-	IF expression THEN statement_ ELSE statement_ ENDIF ';' |
-	CASE expression IS optional_cases OTHERS ARROW statement_ ENDCASE ';' ;
+	IF expression THEN statement_ ELSE statement_ ENDIF ';' {$$ = ($2) ? $4 : $6;} |
+	CASE expression IS optional_cases OTHERS ARROW statement_ ENDCASE ';' {$$ = isnan($4) ? $7 : $4;} ;
 
 operator:
 	OROP |
@@ -99,20 +109,23 @@ operator:
 	| EXPOP |
 	NOTOP ;
 
-reductions:
-	reductions statement_ {$$ = evaluateReduction($<oper>0, $1, $2);} |
-	%empty {$$ = $<oper>0 == ADD ? 0 : 1;} ;
-
 optional_cases:
-	case optional_cases |
-	%empty ;
+	optional_cases case {$$ = isnan($1) ? $2 : $1;} |
+	error {$$ = 0;} ;
 
 case: 
-	WHEN INT_LITERAL ARROW statement_ | 
-	error ;
+	WHEN INT_LITERAL ARROW statement_ {$$ = $<value>-2 == $2 ? $4 : NAN;} ; 
+
+reductions:
+	reductions statement_ {$$ = evaluateReduction($<oper>0, $1, $2);} |
+	%empty {$$ = $<oper>0 == ADD ? 0 : 1;} ;	
 	    
 expression:
-	expression ANDOP relation {$$ = $1 && $3;} |
+	expression OROP binary {$$ = $1 || $3;} |
+	binary ;
+
+binary:
+	binary ANDOP relation {$$ = $1 && $3;} |
 	relation ;
 
 relation:
@@ -124,16 +137,16 @@ term:
 	factor ;
       
 factor:
-	factor MULOP primary {$$ = evaluateArithmetic($1, $2, $3);} |
-	factor REMOP primary {$$ = evaluateArithmetic($1, $2, $3);} |
+	factor MULOP exponent {$$ = evaluateArithmetic($1, $2, $3);} |
+	factor REMOP exponent {$$ = evaluateArithmetic($1, $2, $3);} |
 	exponent ;
 
 exponent:
-	factor EXPOP notion |
-	notion ;
-
-notion:
-	notion NOTOP primary |
+	unary |
+	exponent EXPOP exponent {$$ = pow($1, $3);} ;
+	
+unary:
+	NOTOP primary {$$ = $2;} |
 	primary ;
 
 primary:
