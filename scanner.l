@@ -1,8 +1,8 @@
-   /* Tim McNeill
-   Lexical Analyzer
-   5 May 2022
-   This file holds all lexemes and their assigned tokens 
-   */
+/*Tim McNeill
+  Lexical Analyzer
+  5 May 2022
+  This file holds all lexemes 
+  and their assigned tokens   */
 
 %{
 #include <cstdio>
@@ -10,7 +10,8 @@
 
 using namespace std;
 
-#include "values.h"
+#include "types.h"
+
 #include "listing.h"
 #include "tokens.h"
 
@@ -34,46 +35,46 @@ real_literal	[0-9]+\.[0-9]*([e|E]([\+|\-][0-9]+))?
 {comment}	   { ECHO; nextLine();}
 {line_comment}	{ ECHO; nextLine();}
 {line}		   { ECHO; nextLine();}
-{real_literal}	{ ECHO; yylval.value = atoi(yytext); return(REAL_LITERAL); }
-"<"		{ ECHO; yylval.oper = LESS; return(RELOP); }
-"=>"	   { ECHO; yylval.oper = TO; return(ARROW);}
-"+"		{ ECHO; yylval.oper = ADD; return(ADDOP); }
-"-"		{ ECHO; yylval.oper = SUBTRACT; return(ADDOP); }
-"*"		{ ECHO; yylval.oper = MULTIPLY; return(MULOP); }
-"/"		{ ECHO; yylval.oper = DIVIDE; return(MULOP); }
-"="		{ ECHO; yylval.oper = EQUALS; return(RELOP); }
-"/="	   { ECHO; yylval.oper = ASSIGNQUOTIENT; return(RELOP); }
-">"		{ ECHO; yylval.oper = GREATER; return(RELOP); }
-">="	   { ECHO; yylval.oper = GREATEROREQUAL; return(RELOP); }
-"<="	   { ECHO; yylval.oper = LESSOREQUAL; return(RELOP); }
-"**"	   { ECHO; yylval.oper = EXPONENT; return(EXPOP); }
+{real_literal}	{ ECHO; yylval.type = REAL_TYPE; return(REAL_LITERAL); }
+"<"		{ ECHO; return(RELOP); }
+"=>"	   { ECHO; return(ARROW); }
+"+"		{ ECHO; return(ADDOP); }
+"-"		{ ECHO; return(ADDOP); }
+"*"		{ ECHO; return(MULOP); }
+"/"		{ ECHO;  return(MULOP); }
+"="		{ ECHO; return(RELOP); }
+"/="	   { ECHO; return(RELOP); }
+">"		{ ECHO; return(RELOP); }
+">="	   { ECHO; return(RELOP); }
+"<="	   { ECHO; return(RELOP); }
+"**"	   { ECHO; return(EXPOP); }
 begin		   { ECHO; return(BEGIN_); }
 boolean		{ ECHO; return(BOOLEAN); }
-true	{ ECHO; yylval.value = atoi(yytext); return(BOOL_LITERAL); }
-false	{ ECHO; yylval.value = atoi(yytext); return(BOOL_LITERAL); }
+true	{ ECHO; yylval.type = BOOL_TYPE; return(BOOL_LITERAL); }
+false	{ ECHO; yylval.type = BOOL_TYPE; return(BOOL_LITERAL); }
 end		   { ECHO; return(END); }
 endreduce	{ ECHO; return(ENDREDUCE); }
 function	   { ECHO; return(FUNCTION); }
 integer		{ ECHO; return(INTEGER); }
 is		      { ECHO; return(IS); }
-reduce		{ ECHO; return REDUCE; }
+reduce		{ ECHO; return (REDUCE); }
 returns		{ ECHO; return(RETURNS); }
-and		{ ECHO; yylval.oper = AND; return(ANDOP); }
-case	{ ECHO; yylval.value = atoi(yytext); return(CASE); }
+and		{ ECHO; return(ANDOP); }
+case	{ ECHO; return(CASE); }
 else	{ ECHO; return(ELSE); }
-endcase	{ ECHO; yylval.value = atoi(yytext); return(ENDCASE); }
-endif	{ ECHO; return(ENDIF); }
+endcase	{ ECHO; return(ENDCASE); }
+endif	{ ECHO;  return(ENDIF); }
 if	   { ECHO; return(IF); }
-others	{ ECHO; yylval.value = atoi(yytext); return(OTHERS); }
-real	{ ECHO; return(REAL); }
+others	{ ECHO; return(OTHERS); }
+real	{ ECHO;  return(REAL); }
 then	{ ECHO; return(THEN); }
-when	{ ECHO; yylval.value = atoi(yytext); return(WHEN); }
-or	   { ECHO; yylval.oper = OR; return(OROP); }
-not	{ ECHO; yylval.oper = NOT; return(NOTOP); }
-rem   { ECHO; yylval.oper = REMAINDER; return(REMOP); }
+when	{ ECHO; return(WHEN); }
+or	   { ECHO; return(OROP); }
+not	{ ECHO; return(NOTOP); }
+rem   { ECHO; return(REMOP); }
 {id}		{ ECHO; yylval.iden = (CharPtr)malloc(yyleng + 1); 
 			strcpy(yylval.iden, yytext); return(IDENTIFIER);}
-{int}		{ ECHO; yylval.value = atoi(yytext); return(INT_LITERAL); }
+{int}		{ ECHO; yylval.type = INT_TYPE; return(INT_LITERAL); }
 {punc}		{ ECHO; return(yytext[0]); }
 .		{ ECHO; appendError(LEXICAL, yytext); }
 %%

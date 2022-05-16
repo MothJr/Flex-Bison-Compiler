@@ -14,10 +14,21 @@ using namespace std;
 
 int evaluateReduction(Operators operator_, int head, int tail)
 {
-	if (operator_ == ADD)
-		return head + tail;
+	switch (operator_)
+	{
+		case OR:
+			return head || tail;
+			break;
+		case AND:
+			return head && tail;
+			break;
+		case ADD:
+			return head + tail;
+			break;
+	}
 	return head * tail;
 }
+
 
 int evaluateLogical(int left, Operators operator_, int right)
 {
@@ -25,10 +36,22 @@ int evaluateLogical(int left, Operators operator_, int right)
 	switch(operator_)
 	{
 		case AND:
-			result = left && right;
+			if (left && right)
+			{
+				result = true;
+			} else
+			{
+				result = false;
+			}
 			break;
 		case OR:
-			result = left || right;
+			if (left || right)
+			{
+				result = true;
+			} else
+			{
+				result = false;
+			}
 			break;
 	}
 	return result;
@@ -37,16 +60,20 @@ int evaluateLogical(int left, Operators operator_, int right)
 int evaluateRelational(int left, Operators operator_, int right)
 {
 	int result;
+	int opt;
 	switch (operator_)
 	{
 		case LESS:
 			result = left < right;
 			break;
 		case TO:
-			if (left == true)
+			switch (opt)
 			{
-				right;
+				case 1: 
+					if(opt == 1)
+						return right;
 			}
+			return result = right;
 			break;
 		case EQUALS:
 			result = left == right;
@@ -96,7 +123,10 @@ int evaluateArithmetic(int left, Operators operator_, int right)
 				result = left % right;
 			} 
 			break;
+		case EXPONENT:
+			result = left ^ right;
+			break;
 	}
 	return result;
-}
+} 
 

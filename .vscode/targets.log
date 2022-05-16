@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon May  9 02:52:14 2022
+# Make data base, printed on Sun May 15 22:17:34 2022
 
 # Variables
 
@@ -29,7 +29,7 @@ VSCODE_LOG_NATIVE = false
 # automatic
 @F = $(notdir $@)
 # makefile
-CURDIR := /home/tmac/CMSC_430/Project_3
+CURDIR := /home/tmac/CMSC_430/Project_4
 # makefile
 SHELL = /bin/sh
 # environment
@@ -51,11 +51,11 @@ VSCODE_CWD = /mnt/c/Users/Tessa/AppData/Local/Programs/Microsoft VS Code
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
-PATH = /home/tmac/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/WindowsApps/CanonicalGroupLimited.UbuntuonWindows_2004.2022.1.0_x64__79rhkp1fndgsc:/mnt/c/Program Files/Java/jdk-14.0.2/bin:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Git/cmd:/mnt/c/Users/Tessa/.jdks/openjdk-17.0.2:/mnt/c/Users/Tessa/AppData/Local/Programs/Python/Python39/Scripts/:/mnt/c/Users/Tessa/AppData/Local/Programs/Python/Python39/:/mnt/c/Users/Tessa/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files/JetBrains/IntelliJ IDEA 2020.2.3/bin:/mnt/c/Program Files/JetBrains/PyCharm 2021.2/bin:/mnt/c/Users/Tessa/AppData/Local/Programs/Microsoft VS Code/bin:/snap/bin
+PATH = /home/tmac/.vscode-server/bin/da15b6fd3ef856477bf6f4fb29ba1b7af717770d/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/WindowsApps/CanonicalGroupLimited.UbuntuonWindows_2004.2022.1.0_x64__79rhkp1fndgsc:/mnt/c/Program Files/Java/jdk-14.0.2/bin:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Git/cmd:/mnt/c/Users/Tessa/.jdks/openjdk-17.0.2:/mnt/c/Users/Tessa/AppData/Local/Programs/Python/Python39/Scripts/:/mnt/c/Users/Tessa/AppData/Local/Programs/Python/Python39/:/mnt/c/Users/Tessa/AppData/Local/Microsoft/WindowsApps:/mnt/c/Program Files/JetBrains/IntelliJ IDEA 2020.2.3/bin:/mnt/c/Program Files/JetBrains/PyCharm 2021.2/bin:/mnt/c/Users/Tessa/AppData/Local/Programs/Microsoft VS Code/bin:/snap/bin
 # environment
 VSCODE_LOG_STACK = false
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-b9ae986e-47d9-421e-9532-4da319dbb236.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-7770b6be-ac1f-4668-a35a-50199f9f01d6.sock
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # environment
@@ -65,7 +65,7 @@ LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-PWD = /home/tmac/CMSC_430/Project_3
+PWD = /home/tmac/CMSC_430/Project_4
 # default
 .LOADED := 
 # environment
@@ -79,7 +79,7 @@ LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
 LOGNAME = tmac
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
@@ -157,7 +157,7 @@ MOTD_SHOWN = update-motd
 
 # Directories
 
-# . (device 2064, inode 61397): 25 files, no impossibilities.
+# . (device 2064, inode 48721): 25 files, no impossibilities.
 
 # 25 files, no impossibilities in 1 directories.
 
@@ -166,6 +166,12 @@ MOTD_SHOWN = update-motd
 # No implicit rules.
 
 # Files
+
+# Not a target:
+types.h:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
 
 test2_error:
 #  Implicit rule search has not been done.
@@ -181,7 +187,7 @@ scanner.l:
 #  Modification time never checked.
 #  File has not been updated.
 
-scanner.o: scanner.c values.h listing.h tokens.h
+scanner.o: scanner.c types.h listing.h tokens.h
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -202,13 +208,6 @@ all:
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has not been updated.
-
-values.o: values.cc values.h
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'makefile', line 30):
-	g++ -c values.cc
 
 test3:
 #  Implicit rule search has not been done.
@@ -232,12 +231,6 @@ test5_error:
 #  recipe to execute (from 'makefile', line 99):
 	make compile
 	./compile < Test_Files_Errors/test5_error.txt
-
-# Not a target:
-values.cc:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
 
 test:
 #  Implicit rule search has not been done.
@@ -272,13 +265,12 @@ test:
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 15:18:44.878871593
+#  Last modified 2022-05-13 22:36:05.0539187
 #  File has been updated.
 #  Successfully updated.
 
 # Not a target:
 symbols.h:
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -287,6 +279,7 @@ test4_error:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+ 
 #  recipe to execute (from 'makefile', line 95):
 	make compile
 	./compile < Test_Files_Errors/test4_error.txt
@@ -336,6 +329,13 @@ test1:
 	make compile
 	./compile < Test_Files/test1.txt
 
+types.o: types.cc types.h
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 30):
+	g++ -c types.cc
+
 .SILENT: test test_error
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -375,16 +375,16 @@ test_error:
 	./compile < Test_Files_Errors/test6_error.txt
 	
 
-compile: scanner.o parser.o listing.o values.o
+compile: scanner.o parser.o listing.o types.o
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 8):
-	g++ -o compile scanner.o parser.o listing.o values.o
+	g++ -o compile scanner.o parser.o listing.o types.o
 	rm *.o
 	
 
-parser.o: parser.c values.h listing.h symbols.h
+parser.o: parser.c types.h listing.h symbols.h
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -410,7 +410,7 @@ listing.cc:
 #  File has not been updated.
 
 # Not a target:
-values.h:
+types.cc:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -472,19 +472,19 @@ listing.h:
 #  File has not been updated.
 
 # files hash-table stats:
-# Load=36/1024=4%, Rehash=0, Collisions=0/76=0%
+# Load=36/1024=4%, Rehash=0, Collisions=1/76=1%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 51 / storage = 515 B / avg = 10 B
-# current buf: size = 8162 B / used = 515 B / count = 51 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 51 / storage = 493 B / avg = 9 B
+# current buf: size = 8162 B / used = 493 B / count = 51 / avg = 9 B
 
 # strcache performance: lookups = 106 / hit rate = 51%
 # hash-table stats:
 # Load=51/8192=1%, Rehash=0, Collisions=1/106=1%
-# Finished Make data base on Mon May  9 02:52:14 2022
+# Finished Make data base on Sun May 15 22:17:34 2022
 
  
